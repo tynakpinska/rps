@@ -1,10 +1,13 @@
-const getComputerChoice = () => {
-    let choices = ['rock', 'paper', 'scissors'];
-    let index = Math.round(Math.random() * 2);
-    return choices[index];
-}
+const playRound = () => {
 
-const playRound = (playerSelection, computerSelection) => {
+    const getComputerChoice = () => {
+        let choices = ['rock', 'paper', 'scissors'];
+        let index = Math.round(Math.random() * 2);
+        return choices[index];
+    }
+    
+    const playerSelection = prompt('Rock, paper or scissors?').toLowerCase();
+    const computerSelection = getComputerChoice();
 
     if (playerSelection === computerSelection) {
         return 'It\'s a tie!';
@@ -28,8 +31,27 @@ const playRound = (playerSelection, computerSelection) => {
         return 'You lose! Rock beats scissors.';
     }
   }
-   
-  const playerSelection = prompt('Rock, paper or scissors?').toLowerCase();
-  const computerSelection = getComputerChoice();
-  console.log(computerSelection);
-  console.log(playRound(playerSelection, computerSelection));
+
+  const game = () => {
+    let userScore = 0;
+    let computerScore = 0;
+    for (let i = 1; i < 6; i++) {
+        let result = playRound();
+        console.log(`game: ${i}, result: ${result}`)
+        if (result.startsWith('You win!')) {
+            userScore++;
+        }
+        if (result.startsWith('You lose!')) {
+            computerScore++;
+        }
+    }
+    if (userScore > computerScore) {
+        return 'You win!';
+    } else if (userScore > computerScore) {
+        return 'Computer wins.'
+    } else {
+        return 'It\'s a tie!'
+    }
+  }
+  
+  console.log(game());
