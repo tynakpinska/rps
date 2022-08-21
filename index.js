@@ -1,57 +1,86 @@
-const playRound = () => {
+const body = document.querySelector("body");
+const div = document.createElement("div");
+body.appendChild(div);
 
-    const getComputerChoice = () => {
-        let choices = ['rock', 'paper', 'scissors'];
-        let index = Math.round(Math.random() * 2);
-        return choices[index];
-    }
-    
-    const playerSelection = prompt('Rock, paper or scissors?').toLowerCase();
-    const computerSelection = getComputerChoice();
+let userScore = 0;
+let computerScore = 0;
+let gameResult;
+let roundResult = "";
 
-    if (playerSelection === computerSelection) {
-        return 'It\'s a tie!';
-    }
-    else if (playerSelection === 'rock' && computerSelection === 'paper') {
-        return 'You lose! Paper beats rock.';
-    }
-    else if (playerSelection === 'rock' && computerSelection === 'scissors') {
-        return 'You win! Rock beats scissors.';
-    }
-    else if (playerSelection === 'paper' && computerSelection === 'scissors') {
-        return 'You lose! Scissors beat paper.';
-    }
-    else if (playerSelection === 'paper' && computerSelection === 'rock') {
-        return 'You win! Paper beats rock.';
-    }
-    else if (playerSelection === 'scissors' && computerSelection === 'paper') {
-        return 'You win! Scissors beat paper.';
-    }
-    else {
-        return 'You lose! Rock beats scissors.';
-    }
+const playRound = e => {
+  const getComputerChoice = () => {
+    let choices = ["rock", "paper", "scissors"];
+    let index = Math.round(Math.random() * 2);
+    return choices[index];
+  };
+  const playerSelection = e.target.textContent;
+  const computerSelection = getComputerChoice();
+
+  if (playerSelection === computerSelection) {
+    roundResult = "It's a tie!";
+  } else if (playerSelection === "rock" && computerSelection === "paper") {
+    roundResult = "You lose! Paper beats rock.";
+  } else if (playerSelection === "rock" && computerSelection === "scissors") {
+    roundResult = "You win! Rock beats scissors.";
+  } else if (playerSelection === "paper" && computerSelection === "scissors") {
+    roundResult = "You lose! Scissors beat paper.";
+  } else if (playerSelection === "paper" && computerSelection === "rock") {
+    roundResult = "You win! Paper beats rock.";
+  } else if (playerSelection === "scissors" && computerSelection === "paper") {
+    roundResult = "You win! Scissors beat paper.";
+  } else {
+    roundResult = "You lose! Rock beats scissors.";
   }
 
-  const game = () => {
-    let userScore = 0;
-    let computerScore = 0;
-    for (let i = 1; i < 6; i++) {
-        let result = playRound();
-        console.log(`game: ${i}, result: ${result}`)
-        if (result.startsWith('You win!')) {
-            userScore++;
-        }
-        if (result.startsWith('You lose!')) {
-            computerScore++;
-        }
-    }
+  if (roundResult.startsWith("You win!")) {
+    userScore++;
+  }
+  if (roundResult.startsWith("You lose!")) {
+    computerScore++;
+  }
+  if (userScore === 5 || computerScore === 5) {
     if (userScore > computerScore) {
-        return 'You win!';
-    } else if (userScore > computerScore) {
-        return 'Computer wins.'
+      gameResult = "You win!";
+    } else if (userScore < computerScore) {
+      gameResult = "Computer wins.";
     } else {
-        return 'It\'s a tie!'
+      gameResult = "It's a tie!";
     }
+    buttons.forEach(b => b.remove());
   }
-  
-  console.log(game());
+
+  div.textContent = `Round result: ${roundResult}
+User total score: ${userScore}.
+Computer total score: ${computerScore}.
+Game result: ${gameResult || "Keep playing"}`;
+};
+
+const game = () => {
+  let userScore = 0;
+  let computerScore = 0;
+
+  if (userScore > computerScore) {
+    return "You win!";
+  } else if (userScore > computerScore) {
+    return "Computer wins.";
+  } else {
+    return "It's a tie!";
+  }
+};
+
+const createButton = choice => {
+  let button = document.createElement("button");
+  button.textContent = choice;
+  button.style.padding = "10px";
+  button.style.margin = "10px";
+  body.appendChild(button);
+};
+
+createButton("rock");
+createButton("paper");
+createButton("scissors");
+
+const buttons = document.querySelectorAll("button");
+buttons.forEach(b => {
+  b.addEventListener("click", playRound);
+});
